@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin the Wheel (Pie Chart Style)</title>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <style>
+    :where(.ui-wheel-of-fortune) {
+        --_items: 12;
+        all: unset;
+        aspect-ratio: 1 / 1;
+        container-type: inline-size;
+        direction: ltr;
+        display: grid;
+        position: relative;
+        width: 100%;
+        &::after {
+          aspect-ratio: 1/cos(30deg);
+          background-color: crimson;
+          clip-path: polygon(50% 100%,100% 0,0 0);
+          content: "";
+          height: 4cqi;
+          position: absolute;
+          place-self: start center;
+          scale: 1.4;
+        }
+      
+        & > * { position: absolute; }
+      
+        button {
+          aspect-ratio: 1 / 1;
+          background: hsla(0, 0%, 100%, .8);
+          border: 0;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 5cqi;
+          place-self: center;
+          width: 20cqi;
+        }
+      
+        ul {
+          all: unset;
+          clip-path: inset(0 0 0 0 round 50%);
+          display: grid;
+          inset: 0;
+          place-content: center start;
+      
+          li {
+            align-content: center;
+            aspect-ratio: 1 / calc(2 * tan(180deg / var(--_items)));
+            background: hsl(calc(360deg / var(--_items) * calc(var(--_idx))), 100%, 75%);
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+            display: grid;
+            font-size: 5cqi;
+            grid-area: 1 / -1;
+            padding-left: 1ch;
+            rotate: calc(360deg / var(--_items) * calc(var(--_idx) - 1));
+            transform-origin: center right;
+            user-select: none;
+            width: 50cqi;
+      
+            &:nth-of-type(1) { --_idx: 1; }
+            &:nth-of-type(2) { --_idx: 2; }
+            &:nth-of-type(3) { --_idx: 3; }
+            &:nth-of-type(4) { --_idx: 4; }
+            &:nth-of-type(5) { --_idx: 5; }
+            &:nth-of-type(6) { --_idx: 6; }
+            &:nth-of-type(7) { --_idx: 7; }
+            &:nth-of-type(8) { --_idx: 8; }
+            &:nth-of-type(9) { --_idx: 9; }
+            &:nth-of-type(10) { --_idx: 10; }
+            &:nth-of-type(11) { --_idx: 11; }
+            &:nth-of-type(12) { --_idx: 12; }
+          }
+        }
+      }
+      
+      /* for demo */
+      * { box-sizing: border-box; }
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 5cqi;
+      }
+    
+       /* Additional CSS for the modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+      }
+  
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        border-radius: 10px;
+      }
+  
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+  
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+  </style>
+</head>
+<body>
+  
+    <fieldset class="ui-wheel-of-fortune">
+        <ul>
+          <li>$1000</li>
+          <li>$2000</li>
+          <li>$3000</li>
+          <li>$4000</li>
+          <li>$5000</li>
+          <li>$6000</li>
+          <li>$7000</li>
+          <li>$8000</li>
+          <li>$9000</li>
+          <li>$10000</li>
+          <li>$11000</li>
+          <li>$12000</li>
+        </ul>
+        <button type="button">SPIN</button>
+      </fieldset>
+       <!-- Modal for displaying the result -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Congratulations!</h2>
+        <p id="resultText"></p>
+        </div>
+    </div>
+  
+
+  <script>
+    // Initialize LIFF app
+    liff.init({
+        liffId: "2006461312-pjMlaD26"  // 使用正確的 LIFF ID
+      }).then(() => {
+        console.log('LIFF 已經初始化');
+      }).catch(err => {
+        console.error('LIFF 初始化失敗', err);
+      });
+
+    // Wheel spinning logic
+    function wheelOfFortune(selector) {
+        const node = document.querySelector(selector);
+        if (!node) return;
+      
+        const spin = node.querySelector('button');
+        const wheel = node.querySelector('ul');
+        const modal = document.getElementById('resultModal');
+        const resultText = document.getElementById('resultText');
+        const closeBtn = modal.querySelector('.close');
+        let animation;
+        let previousEndDegree = 0;
+      
+        spin.addEventListener('click', () => {
+            if (animation) {
+                animation.cancel(); // Reset the animation if it already exists
+            }
+      
+            const randomAdditionalDegrees = Math.random() * 360 + 1800;
+            const newEndDegree = previousEndDegree + randomAdditionalDegrees;
+      
+            animation = wheel.animate([
+                { transform: `rotate(${previousEndDegree}deg)` },
+                { transform: `rotate(${newEndDegree}deg)` }
+            ], {
+                duration: 4000,
+                direction: 'normal',
+                easing: 'cubic-bezier(0.440, -0.205, 0.000, 1.130)',
+                fill: 'forwards',
+                iterations: 1
+            });
+      
+            previousEndDegree = newEndDegree;
+    
+            // Show result after animation completes
+            animation.onfinish = () => {
+                const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 30);
+                const prizes = ['$1000', '$2000', '$3000', '$4000', '$5000', '$6000', '$7000', '$8000', '$9000', '$10000', '$11000', '$12000'];
+                const winningPrize = prizes[winningIndex];
+                resultText.textContent = `You won ${winningPrize}!`;
+                modal.style.display = 'block';
+            };
+        });
+    
+        // Close modal when clicking the close button
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+    
+        // Close modal when clicking outside of it
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
+    
+    // Usage
+    wheelOfFortune('.ui-wheel-of-fortune');
+  </script>
+</body>
+</html>
