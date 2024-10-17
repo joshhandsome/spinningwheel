@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spin the Wheel (Pie Chart Style)</title>
   <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <title>玫想法</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
   <style>
+    
     :where(.ui-wheel-of-fortune) {
         --_items: 12;
         all: unset;
@@ -81,7 +86,15 @@
       body {
         font-family: system-ui, sans-serif;
         padding: 5cqi;
+        background-color: #c44937;
       }
+
+      h1 {
+        font-family: 'Noto Serif TC', serif;
+        color: #f8ebd1;
+        text-align: center;
+        font-size: 3.5rem; /* Adjust this value to make it larger than the default h1 */
+     }
     
        /* Additional CSS for the modal */
     .modal {
@@ -125,7 +138,9 @@
   </style>
 </head>
 <body>
-  
+  <h1>玫想法</h1>
+  <br>
+  <h1>轉一下吧</h1>
     <fieldset class="ui-wheel-of-fortune">
         <ul>
           <li>$1000</li>
@@ -202,7 +217,7 @@
                 const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 30);
                 const prizes = ['$1000', '$2000', '$3000', '$4000', '$5000', '$6000', '$7000', '$8000', '$9000', '$10000', '$11000', '$12000'];
                 const winningPrize = prizes[winningIndex];
-                resultText.textContent = `來一杯 ${winningPrize}!`;
+                resultText.textContent = `${winningPrize}!`;
                 modal.style.display = 'block';
             };
         });
