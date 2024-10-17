@@ -147,7 +147,7 @@
     <div id="resultModal" class="modal">
         <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Congratulations!</h2>
+        <h2>今天就來一杯</h2>
         <p id="resultText"></p>
         </div>
     </div>
@@ -202,7 +202,7 @@
                 const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 30);
                 const prizes = ['$1000', '$2000', '$3000', '$4000', '$5000', '$6000', '$7000', '$8000', '$9000', '$10000', '$11000', '$12000'];
                 const winningPrize = prizes[winningIndex];
-                resultText.textContent = `You won ${winningPrize}!`;
+                resultText.textContent = `來一杯 ${winningPrize}!`;
                 modal.style.display = 'block';
             };
         });
