@@ -164,7 +164,7 @@
     </fieldset>
 
     <!-- 添加槍的圖片 -->
-    <img src="1320476.jpg" id="gun" draggable="true">
+    <img src="C:\\Users\\josh9\\OneDrive\\桌面\\咚咚\\1320476.jpg" id="gun" draggable="true">
 
     <!-- Modal for displaying the result -->
     <div id="resultModal" class="modal">
@@ -181,33 +181,6 @@
 
     // Wheel spinning logic
     function wheelOfFortune(selector) {
-        const node = document.querySelector(selector);
-        if (!node) return;
-      
-        const spin = node.querySelector('button');
-        const wheel = node.querySelector('ul');
-        const modal = document.getElementById('resultModal');
-        const resultText = document.getElementById('resultText');
-        const closeBtn = modal.querySelector('.close');
-        let animation;
-        let previousEndDegree = 0;
-
-        const gun = document.getElementById('gun'); // 槍的元素
-
-        // 拖動槍的圖片
-        gun.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text/plain', null);
-        });
-
-        gun.addEventListener('dragend', (event) => {
-            const rect = spin.getBoundingClientRect();
-            if (event.clientX >= rect.left && event.clientX <= rect.right &&
-                event.clientY >= rect.top && event.clientY <= rect.bottom) {
-                startSpin(); // 槍拖到spin按鈕位置，開始旋轉
-            }
-        });
-
-      function wheelOfFortune(selector) {
       const node = document.querySelector(selector);
       if (!node) return;
 
@@ -227,63 +200,72 @@
       });
 
       gun.addEventListener('dragend', (event) => {
-          const rect = spin.getBoundingClientRect();
-          if (event.clientX >= rect.left && event.clientX <= rect.right &&
-              event.clientY >= rect.top && event.clientY <= rect.bottom) {
-              startSpin(); // 槍拖到spin按鈕位置，開始旋轉
-          }
-      });
+        checkSpinButton(event.clientX, event.clientY);
+     });
 
-      // 針對手機觸摸的處理
-      gun.addEventListener('touchstart', handleTouchStart);
-      gun.addEventListener('touchmove', handleTouchMove);
-      gun.addEventListener('touchend', handleTouchEnd);
+     // Mobile touch functionality
+    gun.addEventListener('touchstart', handleTouchStart);
+    gun.addEventListener('touchmove', handleTouchMove);
+    gun.addEventListener('touchend', handleTouchEnd);
 
-      let touchX = 0;
-      let touchY = 0;
+    let touchStartX, touchStartY;
+    let gunStartLeft, gunStartTop;
 
       function handleTouchStart(event) {
           const touch = event.touches[0];
-          touchX = touch.clientX;
-          touchY = touch.clientY;
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          const rect = gun.getBoundingClientRect();
+          gunStartLeft = rect.left;
+          gunStartTop = rect.top;
+          gun.style.position = 'absolute';
       }
 
       function handleTouchMove(event) {
+          event.preventDefault(); // Prevent scrolling while dragging
           const touch = event.touches[0];
-          gun.style.position = 'absolute';
-          gun.style.left = `${touch.clientX - gun.offsetWidth / 2}px`;
-          gun.style.top = `${touch.clientY - gun.offsetHeight / 2}px`;
+          const deltaX = touch.clientX - touchStartX;
+          const deltaY = touch.clientY - touchStartY;
+          gun.style.left = `${gunStartLeft + deltaX}px`;
+          gun.style.top = `${gunStartTop + deltaY}px`;
       }
 
       function handleTouchEnd(event) {
-          const rect = spin.getBoundingClientRect();
-          if (touchX >= rect.left && touchX <= rect.right &&
-              touchY >= rect.top && touchY <= rect.bottom) {
-              startSpin(); // 當槍被拖動到spin按鈕，開始旋轉
-          }
-          gun.style.position = 'fixed'; // 恢復槍的位置
+          const touch = event.changedTouches[0];
+          checkSpinButton(touch.clientX, touch.clientY);
+          gun.style.position = 'fixed';
           gun.style.left = '';
           gun.style.top = '';
       }
 
-        function startSpin() {
-            if (animation) {
-                animation.cancel(); // Reset the animation if it already exists
-            }
 
-            const randomAdditionalDegrees = Math.random() * 360 + 1800;
-            const newEndDegree = previousEndDegree + randomAdditionalDegrees;
+      function checkSpinButton(x, y) {
+        const rect = spin.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+            startSpin();
+        }
+      }
 
-            animation = wheel.animate([
-                { transform: `rotate(${previousEndDegree}deg)` },
-                { transform: `rotate(${newEndDegree}deg)` }
-            ], {
-                duration: 4000,
-                direction: 'normal',
-                easing: 'cubic-bezier(0.440, -0.205, 0.000, 1.130)',
-                fill: 'forwards',
-                iterations: 1
-            });
+
+
+      function startSpin() {
+        if (animation) {
+            animation.cancel(); // Reset the animation if it already exists
+        }
+
+        const randomAdditionalDegrees = Math.random() * 360 + 1800;
+        const newEndDegree = previousEndDegree + randomAdditionalDegrees;
+
+        animation = wheel.animate([
+            { transform: `rotate(${previousEndDegree}deg)` },
+            { transform: `rotate(${newEndDegree}deg)` }
+        ], {
+            duration: 4000,
+            direction: 'normal',
+            easing: 'cubic-bezier(0.440, -0.205, 0.000, 1.130)',
+            fill: 'forwards',
+            iterations: 1
+        });
 
             previousEndDegree = newEndDegree;
 
@@ -293,16 +275,8 @@
             
                 // 用圖片來表示獎品
                 const prizeImages = [
-                    '也格.jpg', // 野格 對應的圖片
-                    '下載.jpg', // 對應的圖片
-                    '下載1.jpg', // 對應的圖片
-                    '圖片1.jpg', // 對應的圖片
-                    '也格.jpg', // 對應的圖片
-                    '也格.jpg', // 對應的圖片
-                    '也格.jpg', // 對應的圖片
-                    '也格.jpg', // 對應的圖片
-                    '也格.jpg', // 對應的圖片
-                    '也格.jpg' // 對應的圖片
+                    '也格.jpg',  '下載.jpg',  '下載1.jpg', '圖片1.jpg', 
+                    '也格.jpg', '也格.jpg','也格.jpg', '也格.jpg', '也格.jpg','也格.jpg' 
                 ];
                 const winningPrizeImage = prizeImages[winningIndex];
             
@@ -327,6 +301,7 @@
 
   // Initialize the wheel
   wheelOfFortune('.ui-wheel-of-fortune');
+
   </script>
 </body>
 </html>
