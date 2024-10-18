@@ -64,6 +64,13 @@
             transform-origin: center right;
             user-select: none;
             width: 50cqi;
+
+
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
       
             &:nth-of-type(1) { --_idx: 1; }
             &:nth-of-type(2) { --_idx: 2; }
@@ -76,6 +83,17 @@
             &:nth-of-type(9) { --_idx: 9; }
             &:nth-of-type(10) { --_idx: 10; }
           }
+
+           li span {
+           
+            /* Rotate the entire word by 90 degrees */
+            transform: rotate(-90deg);
+           
+          }
+
+
+
+          
         }
       }
       
@@ -149,16 +167,16 @@
   <h1>轉一下吧!</h1>
     <fieldset class="ui-wheel-of-fortune">
         <ul>
-          <li>野格炸彈</li>
-          <li>瑪格麗特</li>
-          <li>長島冰茶</li>
-          <li>雞尾酒</li>
-          <li>草莓酒</li>
-          <li>水果酒</li>
-          <li>什麼酒</li>
-          <li>$8000</li>
-          <li>$9000</li>
-          <li>$10000</li>
+         <li><span>野</span>  <span> 格</span>  <span>炸</span>  <span>彈</span></li>
+          <li><span>瑪</span>  <span> 格</span>  <span>麗</span>  <span>特</span></li>
+          <li><span>長</span>  <span> 島</span>  <span>冰</span>  <span>茶</span></li>
+          <li><span>雞</span>  <span> 尾</span>  <span>酒</span></li>
+          <li><span>水</span>  <span> 果</span>  <span>酒</span></li>
+          <li><span>馬</span>  <span> 丁</span>  <span>尼</span></li>
+          <li><span>血</span>  <span>腥</span>  <span>馬</span>  <span>麗</span></li>
+          <li><span>莫</span>  <span>西</span>  <span>多</span>  </li>
+          <li><span>柯</span>  <span>夢</span>  <span>羅</span>  <span>多</span></li>
+          <li><span>琴</span>  <span>費</span>  <span>司</span>  </li>
         </ul>
         <button type="button">SPIN</button>
     </fieldset>
