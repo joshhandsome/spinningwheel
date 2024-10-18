@@ -207,14 +207,73 @@
             }
         });
 
+      function wheelOfFortune(selector) {
+      const node = document.querySelector(selector);
+      if (!node) return;
+
+      const spin = node.querySelector('button');
+      const wheel = node.querySelector('ul');
+      const modal = document.getElementById('resultModal');
+      const resultText = document.getElementById('resultText');
+      const closeBtn = modal.querySelector('.close');
+      let animation;
+      let previousEndDegree = 0;
+
+      const gun = document.getElementById('gun'); // 槍的元素
+
+      // 拖動槍的圖片（桌面瀏覽器）
+      gun.addEventListener('dragstart', (event) => {
+          event.dataTransfer.setData('text/plain', null);
+      });
+
+      gun.addEventListener('dragend', (event) => {
+          const rect = spin.getBoundingClientRect();
+          if (event.clientX >= rect.left && event.clientX <= rect.right &&
+              event.clientY >= rect.top && event.clientY <= rect.bottom) {
+              startSpin(); // 槍拖到spin按鈕位置，開始旋轉
+          }
+      });
+
+      // 針對手機觸摸的處理
+      gun.addEventListener('touchstart', handleTouchStart);
+      gun.addEventListener('touchmove', handleTouchMove);
+      gun.addEventListener('touchend', handleTouchEnd);
+
+      let touchX = 0;
+      let touchY = 0;
+
+      function handleTouchStart(event) {
+          const touch = event.touches[0];
+          touchX = touch.clientX;
+          touchY = touch.clientY;
+      }
+
+      function handleTouchMove(event) {
+          const touch = event.touches[0];
+          gun.style.position = 'absolute';
+          gun.style.left = `${touch.clientX - gun.offsetWidth / 2}px`;
+          gun.style.top = `${touch.clientY - gun.offsetHeight / 2}px`;
+      }
+
+      function handleTouchEnd(event) {
+          const rect = spin.getBoundingClientRect();
+          if (touchX >= rect.left && touchX <= rect.right &&
+              touchY >= rect.top && touchY <= rect.bottom) {
+              startSpin(); // 當槍被拖動到spin按鈕，開始旋轉
+          }
+          gun.style.position = 'fixed'; // 恢復槍的位置
+          gun.style.left = '';
+          gun.style.top = '';
+      }
+
         function startSpin() {
             if (animation) {
                 animation.cancel(); // Reset the animation if it already exists
             }
-      
+
             const randomAdditionalDegrees = Math.random() * 360 + 1800;
             const newEndDegree = previousEndDegree + randomAdditionalDegrees;
-      
+
             animation = wheel.animate([
                 { transform: `rotate(${previousEndDegree}deg)` },
                 { transform: `rotate(${newEndDegree}deg)` }
@@ -225,32 +284,32 @@
                 fill: 'forwards',
                 iterations: 1
             });
-      
+
             previousEndDegree = newEndDegree;
-    
+
             // Show result after animation completes
             animation.onfinish = () => {
-              const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 36); // 360/10 items
-          
-              // 用圖片來表示獎品
-              const prizeImages = [
-                  '也格.jpg', // $野格 對應的圖片
-                  '下載.jpg', // $ 對應的圖片
-                  '下載1.jpg', // $3000 對應的圖片
-                  '圖片1.jpg', // $4000 對應的圖片
-                  '也格.jpg', // $5000 對應的圖片
-                  '也格.jpg', // $6000 對應的圖片
-                  '也格.jpg', // $7000 對應的圖片
-                  '也格.jpg', // $8000 對應的圖片
-                  '也格.jpg', // $9000 對應的圖片
-                  '也格.jpg' // $10000 對應的圖片
-              ];
-              const winningPrizeImage = prizeImages[winningIndex];
-          
-              // 動態插入獎品圖片到 modal 中
-              resultText.innerHTML = `<img src="${winningPrizeImage}" alt="Prize Image" style="max-width: 100%; height: auto;">`;
-              modal.style.display = 'block';
-          };
+                const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 36); // 360/10 items
+            
+                // 用圖片來表示獎品
+                const prizeImages = [
+                    '也格.jpg', // 野格 對應的圖片
+                    '下載.jpg', // 對應的圖片
+                    '下載1.jpg', // 對應的圖片
+                    '圖片1.jpg', // 對應的圖片
+                    '也格.jpg', // 對應的圖片
+                    '也格.jpg', // 對應的圖片
+                    '也格.jpg', // 對應的圖片
+                    '也格.jpg', // 對應的圖片
+                    '也格.jpg', // 對應的圖片
+                    '也格.jpg' // 對應的圖片
+                ];
+                const winningPrizeImage = prizeImages[winningIndex];
+            
+                // 動態插入獎品圖片到 modal 中
+                resultText.innerHTML = `<img src="${winningPrizeImage}" alt="Prize Image" style="max-width: 100%; height: auto;">`;
+                modal.style.display = 'block';
+            };
         }
 
         spin.addEventListener('click', startSpin);
@@ -258,16 +317,16 @@
         closeBtn.addEventListener('click', () => {
             modal.style.display = 'none';
         });
-      
+
         window.addEventListener('click', (event) => {
             if (event.target == modal) {
                 modal.style.display = 'none';
             }
         });
-    }
-    
-    // Initialize the wheel
-    wheelOfFortune('.ui-wheel-of-fortune');
+      }
+
+  // Initialize the wheel
+  wheelOfFortune('.ui-wheel-of-fortune');
   </script>
 </body>
 </html>
