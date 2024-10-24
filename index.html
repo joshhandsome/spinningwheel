@@ -304,6 +304,23 @@
             };
         }
 
+           // 震動功能
+        function vibrateDevice() {
+          if (navigator.vibrate) {
+            navigator.vibrate(200); // 震動 200 毫秒
+          } 
+        }
+
+        document.getElementById('spin-button').addEventListener('click', function() {
+          vibrateDevice(); // 震動手機
+        });
+
+
+
+
+
+      
+
         spin.addEventListener('click', startSpin);
 
         closeBtn.addEventListener('click', () => {
