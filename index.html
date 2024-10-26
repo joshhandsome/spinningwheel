@@ -3,13 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
   <title>玫想法</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
   <style>
-    
+    /* CSS for styling */
+    * { box-sizing: border-box; }
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 5cqi;
+        background-color: #c44937;
+      }
+
+      h1 {
+        font-family: 'Noto Serif TC', serif;
+        color: #f8ebd1;
+        text-align: center;
+        font-size: 3.5rem;
+     }
+    .dazcontainer { display: block; width: 80%; height: auto; margin: 0 auto; padding: 2em; font-family: monospace; font-size: 15px; color: #000; }
+    .dazobject { display: block; position:absolute ;left:10%; top:135%;max-width: 300px; min-width: 300px; height: auto; margin: 20px auto 12px auto; }
+    #gun { transform: translate(0, 0) rotate(0deg); transform-origin: bottom left; }
+    .aim { display: block; width: 10px; height: 10px; background-color: #222; border-radius: 1px 15px 12px 4px; transform: translate(100px, -6px); clip-path: polygon(3% 0, 80% 0%, 100% 100%, 0% 100%); }
+    .trigger { display: block; width: 120px; height: 120px; transform: translate(-36px, -138px) scale(.60); background-color: #222; clip-path: polygon(40% 30%, 88% 26%, 93% 7%, 93% 0, 100% 0, 100% 8%, 94% 28%, 79% 35%, 39% 38%); z-index: 999; }
+    #gun:hover { animation-play-state: paused; }
+    .shoot-play { animation-play-state: running; animation: play .8s infinite; }
+    @keyframes play {
+      0% { transform: translate(-5px, -3px) rotate(-4deg); }
+      100% { transform: translate(5px, 0) rotate(0deg); }
+    }
+    .animslider { animation-play-state: running; animation: playslide .8s infinite; }
+    @keyframes playslide {
+      0% { transform: translate(-9px, 0); }
+      100% { transform: translate(0, 0); }
+    }
+    .gun-component { display: block; width: 120px; height: 120px; background-color: #222; clip-path: polygon(100% 0, 100% 14%, 28% 14%, 20% 48%, 0 48%, 0 40%, 10% 18%, 0 13%, 0 0); }
+    #component-top { display: block; width: 120px; height: 11px; background-color: #222; border-radius: 12px 3px 0 4px; box-shadow: -2px 4px 0 #555, -3px 6px #000, inset 0 2px 1px #777, 3px 3px 0 #555; }
+    #shooting { z-index: 1000; }
+    .flash { display: block; width: 8px; height: 6px; z-index: 999; background-color: #F63; animation: xshot .9s infinite; transform: translate(122px, -245px) scale(1); opacity: 0; filter: blur(0); box-shadow: 0 1px 1px #FC3, 0 -1px -2px #FF9; }
+    @keyframes xshot {
+      0%, 50% { transform: translate(122px, -245px) scale(1); opacity: 0; }
+      50.5%, 70% { transform: translate(122px, -245px) scale(3); border-radius: 100%; filter: blur(1px); opacity: .7; }
+      70.5%, 80% { transform: translate(122px, -245px) scale(1); opacity: 1; }
+      80.5%, 90% { transform: translate(122px, -245px) scale(3); border-radius: 100%; filter: blur(2px); opacity: 1; }
+      90.5%, 100% { transform: translate(322px, -245px) scale(3); border-radius: 100%; filter: blur(3px); opacity: 1; box-shadow: 0 1px 1px #FC3, 0 -1px -2px #FF9; }
+    }
+    .flash:after { content: ''; display: inline-block; width: 6px; height: 2px; background-color: #FF3; filter: unset; box-shadow: 2px 0 0 #FF6, 0 -6px 0 #FF6; transform: translate(-2px, -8px); z-index: 1000; }
+    .topnav { display: block; width: 100%; height: auto; margin: 0 auto; font-size: 22px; color: #555; font-family: "Courier New", Courier, monospace; font-weight: bold; }
+    .thenav { display: block; width: 100%; height: auto; margin: 0 auto; position: fixed; bottom: 0; left: 0; background-color: rgba(0, 0, 0, 0.7); }
+    .bu { background-color: #FFF; padding: .7em 1em .7em; border-radius: 4px; border: none; color: #099; }
+    .bu:hover { background-color: #333; color: #0CC; }
+    .daztitle { display: block; width: 80%; height: auto; padding: 2em 0 3em; text-align: center; margin: 0 auto 22px auto; }
+    .daztitle h2 { font-size: 22px; color: #069; font-family: "Courier New", Courier, monospace; }
+
+
+
+
     :where(.ui-wheel-of-fortune) {
         --_items: 10; /* 改成 10 */
         all: unset;
@@ -18,6 +70,7 @@
         direction: ltr;
         display: grid;
         position: relative;
+        left:20%;
         width: 100%;
         &::after {
           aspect-ratio: 1/cos(30deg);
@@ -34,14 +87,15 @@
       
         button {
           aspect-ratio: 1 / 1;
-          background: hsla(0, 0%, 100%, .8);
           border: 0;
-          border-radius: 50%;
+          width: 300px;
           cursor: pointer;
           font-size: 5cqi;
           place-self: center;
-          width: 20cqi;
+          border-radius: 50%;
+          transition: background 0.3s ease;
         }
+       
       
         ul {
           all: unset;
@@ -96,32 +150,9 @@
           
         }
       }
-      
-      * { box-sizing: border-box; }
-      body {
-        font-family: system-ui, sans-serif;
-        padding: 5cqi;
-        background-color: #c44937;
-      }
 
-      h1 {
-        font-family: 'Noto Serif TC', serif;
-        color: #f8ebd1;
-        text-align: center;
-        font-size: 3.5rem;
-     }
 
-    /* 槍的圖片設置在右下角 */
-    #gun {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 60px;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .modal {
+      .modal {
         display: none;
         position: fixed;
         z-index: 1;
@@ -159,10 +190,22 @@
         cursor: pointer;
       }
 
+
+
+
+
+
+
+
+
+
+
+
+
   </style>
 </head>
 <body>
-  <h1>玫想法?</h1>
+    <h1>玫想法?</h1>
   
   <h1>轉一下吧!</h1>
     <fieldset class="ui-wheel-of-fortune">
@@ -178,156 +221,119 @@
           <li><span>柯</span>  <span>夢</span>  <span>羅</span>  <span>多</span></li>
           <li><span>琴</span>  <span>費</span>  <span>司</span>  </li>
         </ul>
-        <button type="button">SPIN</button>
+       
     </fieldset>
 
-    <!-- 添加槍的圖片 -->
-    <img src="1320476.jpg" id="gun" draggable="true">
 
-    <!-- Modal for displaying the result -->
-    <div id="resultModal" class="modal">
-        <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>今天就來一杯</h2>
-        <p id="resultText"></p>
+
+
+
+
+
+ 
+
+
+    <div class="dazobject">
+        <div id="gun" class="gun">
+            <div id="component-top" class="component-top">
+                <div class="aim"></div>
+            </div>
+            <div class="gun-component"></div>
+            <div class="trigger"></div>
+            <div id="shooting" class="shooting"></div>
+            <button id="shootanim" class="bu">Shoot/Stop</button>
         </div>
     </div>
+
   
 
-  <script>
-    
-
-    // Wheel spinning logic
-    function wheelOfFortune(selector) {
-      const node = document.querySelector(selector);
-      if (!node) return;
-
-      const spin = node.querySelector('button');
-      const wheel = node.querySelector('ul');
-      const modal = document.getElementById('resultModal');
-      const resultText = document.getElementById('resultText');
-      const closeBtn = modal.querySelector('.close');
-      let animation;
-      let previousEndDegree = 0;
-
-      const gun = document.getElementById('gun'); // 槍的元素
-
-      // 拖動槍的圖片（桌面瀏覽器）
-      gun.addEventListener('dragstart', (event) => {
-          event.dataTransfer.setData('text/plain', null);
-      });
-
-      gun.addEventListener('dragend', (event) => {
-        checkSpinButton(event.clientX, event.clientY);
-     });
-
-     // Mobile touch functionality
-    gun.addEventListener('touchstart', handleTouchStart);
-    gun.addEventListener('touchmove', handleTouchMove);
-    gun.addEventListener('touchend', handleTouchEnd);
-
-    let touchStartX, touchStartY;
-    let gunStartLeft, gunStartTop;
-
-      function handleTouchStart(event) {
-          const touch = event.touches[0];
-          touchStartX = touch.clientX;
-          touchStartY = touch.clientY;
-          const rect = gun.getBoundingClientRect();
-          gunStartLeft = rect.left;
-          gunStartTop = rect.top;
-          gun.style.position = 'absolute';
-      }
-
-      function handleTouchMove(event) {
-          event.preventDefault(); // Prevent scrolling while dragging
-          const touch = event.touches[0];
-          const deltaX = touch.clientX - touchStartX;
-          const deltaY = touch.clientY - touchStartY;
-          gun.style.left = `${gunStartLeft + deltaX}px`;
-          gun.style.top = `${gunStartTop + deltaY}px`;
-      }
-
-      function handleTouchEnd(event) {
-          const touch = event.changedTouches[0];
-          checkSpinButton(touch.clientX, touch.clientY);
-          gun.style.position = 'fixed';
-          gun.style.left = '';
-          gun.style.top = '';
-      }
-
-
-      function checkSpinButton(x, y) {
-        const rect = spin.getBoundingClientRect();
-        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
-            startSpin();
-        }
-      }
 
 
 
-      function startSpin() {
-        if (animation) {
-            animation.cancel(); // Reset the animation if it already exists
-        }
 
-        const randomAdditionalDegrees = Math.random() * 360 + 1800;
-        const newEndDegree = previousEndDegree + randomAdditionalDegrees;
 
-        animation = wheel.animate([
-            { transform: `rotate(${previousEndDegree}deg)` },
-            { transform: `rotate(${newEndDegree}deg)` }
-        ], {
-            duration: 4000,
-            direction: 'normal',
-            easing: 'cubic-bezier(0.440, -0.205, 0.000, 1.130)',
-            fill: 'forwards',
-            iterations: 1
-        });
 
-            previousEndDegree = newEndDegree;
+    <!-- Result Modal -->
+    <div id="resultModal" class="modal">
+        <span class="close">&times;</span>
+        <div id="resultText"></div>
+    </div>
 
-            // Show result after animation completes
-            animation.onfinish = () => {
-                const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 36); // 360/10 items
-            
-                // 用圖片來表示獎品
-                const prizeImages = [
-                    '也格.jpg',  '下載.jpg',  '下載1.jpg', '圖片1.jpg', 
-                    '也格.jpg', '也格.jpg','也格.jpg', '也格.jpg', '也格.jpg','也格.jpg' 
-                ];
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Toggle shooting animation on button click
+            $("#shootanim").click(function() {
+                $("#gun").toggleClass("shoot-play");
+                $("#component-top").toggleClass("animslider");
+                $("#shooting").toggleClass("flash");
+            });
+        
+            let animation;
+            let previousEndDegree = 0;
+            let isSpinning = false;
+            const prizeImages = [
+                '也格.jpg', '下載.jpg', '下載1.jpg', '圖片1.jpg',
+                '也格.jpg', '也格.jpg', '也格.jpg', '也格.jpg', '也格.jpg'
+            ];
+        
+            // Handle gun click for spinning/stop functionality
+            $("#gun").click(function() {
+                if (!isSpinning) {
+                    startSpin();
+                } else {
+                    stopSpin();
+                }
+            });
+        
+            function startSpin() {
+                isSpinning = true;
+                if (animation) {
+                    animation.cancel();
+                }
+                const wheel = document.querySelector('.ui-wheel-of-fortune ul');
+                const randomAdditionalDegrees = Math.random() * 360 + 3600;
+                const newEndDegree = previousEndDegree + randomAdditionalDegrees;
+                animation = wheel.animate([
+                    { transform: `rotate(${previousEndDegree}deg)` },
+                    { transform: `rotate(${newEndDegree}deg)` }
+                ], {
+                    duration: 4000,
+                    easing: 'cubic-bezier(0.440, -0.205, 0.000, 1.130)',
+                    fill: 'forwards',
+                    iterations: Infinity
+                });
+                previousEndDegree = newEndDegree;
+            }
+        
+            function stopSpin() {
+                isSpinning = false;
+                if (animation) {
+                    animation.cancel();
+                }
+                // Calculate winning index and display the result
+                const winningIndex = Math.floor((360 - (previousEndDegree % 360)) / 36);
                 const winningPrizeImage = prizeImages[winningIndex];
-            
-                // 動態插入獎品圖片到 modal 中
+                const modal = document.getElementById('resultModal');
+                const resultText = document.getElementById('resultText');
                 resultText.innerHTML = `<img src="${winningPrizeImage}" alt="Prize Image" style="max-width: 100%; height: auto;">`;
                 modal.style.display = 'block';
-            };
-        }
-
-       
-
-
-
-
-
-      
-
-        spin.addEventListener('click', startSpin);
-
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target == modal) {
-                modal.style.display = 'none';
             }
+        
+            // Close modal when 'X' is clicked
+            $(".close").click(function() {
+                $("#resultModal").hide();
+            });
+        
+            // Close modal when clicking outside of it
+            $(window).click(function(event) {
+                const modal = document.getElementById('resultModal');
+                if (event.target == modal) {
+                    $("#resultModal").hide();
+                }
+            });
         });
-      }
+    </script>
 
-  // Initialize the wheel
-  wheelOfFortune('.ui-wheel-of-fortune');
-
-  </script>
 </body>
 </html>
