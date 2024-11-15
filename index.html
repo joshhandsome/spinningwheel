@@ -1,333 +1,321 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-  <title>玫想法</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
-  <style>
-    
-    :where(.ui-wheel-of-fortune) {
-        --_items: 10; /* 改成 10 */
-        all: unset;
-        aspect-ratio: 1 / 1;
-        container-type: inline-size;
-        direction: ltr;
-        display: grid;
-        position: relative;
-        width: 100%;
-        &::after {
-          aspect-ratio: 1/cos(30deg);
-          background-color: crimson;
-          clip-path: polygon(50% 100%,100% 0,0 0);
-          content: "";
-          height: 4cqi;
-          position: absolute;
-          place-self: start center;
-          scale: 1.4;
-        }
-      
-        & > * { position: absolute; }
-      
-        button {
-          aspect-ratio: 1 / 1;
-          background: hsla(0, 0%, 100%, .8);
-          border: 0;
-          border-radius: 50%;
-          cursor: pointer;
-          font-size: 5cqi;
-          place-self: center;
-          width: 20cqi;
-        }
-      
-        ul {
-          all: unset;
-          clip-path: inset(0 0 0 0 round 50%);
-          display: grid;
-          inset: 0;
-          place-content: center start;
-      
-          li {
-            font-family: 'Noto Serif TC', serif;
-            align-content: center;
-            aspect-ratio: 1 / calc(2 * tan(180deg / var(--_items)));
-            background: hsl(calc(360deg / var(--_items) * calc(var(--_idx))), 100%, 75%);
-            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
-            display: grid;
-            font-size: 5cqi;
-            grid-area: 1 / -1;
-            padding-left: 1ch;
-            rotate: calc(360deg / var(--_items) * calc(var(--_idx) - 1));
-            transform-origin: center right;
-            user-select: none;
-            width: 50cqi;
-
-
-
+    <meta charset="UTF-8">
+    <title>玫想法轉盤</title>
+    <style>
+        /* Set body to fill screen */
+        body, html {
+            height: 100%;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            
-      
-            &:nth-of-type(1) { --_idx: 1; }
-            &:nth-of-type(2) { --_idx: 2; }
-            &:nth-of-type(3) { --_idx: 3; }
-            &:nth-of-type(4) { --_idx: 4; }
-            &:nth-of-type(5) { --_idx: 5; }
-            &:nth-of-type(6) { --_idx: 6; }
-            &:nth-of-type(7) { --_idx: 7; }
-            &:nth-of-type(8) { --_idx: 8; }
-            &:nth-of-type(9) { --_idx: 9; }
-            &:nth-of-type(10) { --_idx: 10; }
-          }
-
-           li span {
-           
-            /* Rotate the entire word by 90 degrees */
-            transform: rotate(-90deg);
-           
-          }
-
-
-
-          
+            overflow: hidden;
+            background-image: url('背景最終版360x640.png');
+            background-size: cover;
+            background-position: center;
         }
-      }
-      
-      * { box-sizing: border-box; }
-      body {
-        font-family: system-ui, sans-serif;
-        padding: 5cqi;
-        background-color: #c44937;
-      }
 
-      h1 {
-        font-family: 'Noto Serif TC', serif;
-        color: #f8ebd1;
-        text-align: center;
-        font-size: 3.5rem;
-     }
+        /* Full-screen background and centered wheel */
+        .wheel-container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+           
+           
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;          /* Prevent any potential scrolling */
+            
+        }
 
-    /* 槍的圖片設置在右下角 */
-    #gun {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 60px;
-        cursor: pointer;
-        user-select: none;
-    }
 
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4);
-      }
-  
-      .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 400px;
-        text-align: center;
-        border-radius: 10px;
-      }
-  
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-  
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-
-  </style>
-</head>
-<body>
-  <h1>玫想法?</h1>
-  
-  <h1>轉一下吧!</h1>
-    <fieldset class="ui-wheel-of-fortune">
-        <ul>
-         <li><span>野</span>  <span> 格</span>  <span>炸</span>  <span>彈</span></li>
-          <li><span>瑪</span>  <span> 格</span>  <span>麗</span>  <span>特</span></li>
-          <li><span>長</span>  <span> 島</span>  <span>冰</span>  <span>茶</span></li>
-          <li><span>雞</span>  <span> 尾</span>  <span>酒</span></li>
-          <li><span>水</span>  <span> 果</span>  <span>酒</span></li>
-          <li><span>馬</span>  <span> 丁</span>  <span>尼</span></li>
-          <li><span>血</span>  <span>腥</span>  <span>馬</span>  <span>麗</span></li>
-          <li><span>莫</span>  <span>西</span>  <span>多</span>  </li>
-          <li><span>柯</span>  <span>夢</span>  <span>羅</span>  <span>多</span></li>
-          <li><span>琴</span>  <span>費</span>  <span>司</span>  </li>
-        </ul>
-        <button type="button">SPIN</button>
-    </fieldset>
-
-    <!-- 添加槍的圖片 -->
-    <img src="1320476.jpg" id="gun" draggable="true">
-
-    <!-- Modal for displaying the result -->
-    <div id="resultModal" class="modal">
-        <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>今天就來一杯</h2>
-        <p id="resultText"></p>
-        </div>
-    </div>
-  
-
-  <script>
     
 
-    // Wheel spinning logic
-    function wheelOfFortune(selector) {
-      const node = document.querySelector(selector);
-      if (!node) return;
-
-      const spin = node.querySelector('button');
-      const wheel = node.querySelector('ul');
-      const modal = document.getElementById('resultModal');
-      const resultText = document.getElementById('resultText');
-      const closeBtn = modal.querySelector('.close');
-      let animation;
-      let previousEndDegree = 0;
-
-      const gun = document.getElementById('gun'); // 槍的元素
-
-      // 拖動槍的圖片（桌面瀏覽器）
-      gun.addEventListener('dragstart', (event) => {
-          event.dataTransfer.setData('text/plain', null);
-      });
-
-      gun.addEventListener('dragend', (event) => {
-        checkSpinButton(event.clientX, event.clientY);
-     });
-
-     // Mobile touch functionality
-    gun.addEventListener('touchstart', handleTouchStart);
-    gun.addEventListener('touchmove', handleTouchMove);
-    gun.addEventListener('touchend', handleTouchEnd);
-
-    let touchStartX, touchStartY;
-    let gunStartLeft, gunStartTop;
-
-      function handleTouchStart(event) {
-          const touch = event.touches[0];
-          touchStartX = touch.clientX;
-          touchStartY = touch.clientY;
-          const rect = gun.getBoundingClientRect();
-          gunStartLeft = rect.left;
-          gunStartTop = rect.top;
-          gun.style.position = 'absolute';
+        /* Style for wheel image and button */
+         /* Style for wheel image and button */
+         #wheel {
+          
+          
+          width: 80%;
+          height: auto;
+          transform-origin: center ;  /* Ensure rotation happens from center */
+          margin: 0;
+          padding: 0;
+          will-change: transform;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+         
+        
       }
+        
 
-      function handleTouchMove(event) {
-          event.preventDefault(); // Prevent scrolling while dragging
-          const touch = event.touches[0];
-          const deltaX = touch.clientX - touchStartX;
-          const deltaY = touch.clientY - touchStartY;
-          gun.style.left = `${gunStartLeft + deltaX}px`;
-          gun.style.top = `${gunStartTop + deltaY}px`;
+
+
+
+        .button-49,
+    .button-49:after {
+      width: 150px;
+      height: 76px;
+      line-height: 78px;
+      font-size: 30px;
+      font-family: 'Bebas Neue', sans-serif;
+      background: linear-gradient(45deg, transparent 5%, #FF013C 5%);
+      border: 0;
+      color: #fff;
+      letter-spacing: 3px;
+      box-shadow: 6px 0px 0px #00E6F6;
+      outline: transparent;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .button-49:after {
+      --slice-0: inset(50% 50% 50% 50%);
+      --slice-1: inset(80% -6px 0 0);
+      --slice-2: inset(50% -6px 30% 0);
+      --slice-3: inset(10% -6px 85% 0);
+      --slice-4: inset(40% -6px 43% 0);
+      --slice-5: inset(80% -6px 5% 0);
+      
+      content: 'ALTERNATE TEXT';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 3%, #00E6F6 3%, #00E6F6 5%, #FF013C 5%);
+      text-shadow: -3px -3px 0px #F8F005, 3px 3px 0px #00E6F6;
+      clip-path: var(--slice-0);
+    }
+
+    .button-49:hover:after {
+      animation: 1s glitch;
+      animation-timing-function: steps(2, end);
+    }
+
+    @keyframes glitch {
+      0% {
+        clip-path: var(--slice-1);
+        transform: translate(-20px, -10px);
       }
-
-      function handleTouchEnd(event) {
-          const touch = event.changedTouches[0];
-          checkSpinButton(touch.clientX, touch.clientY);
-          gun.style.position = 'fixed';
-          gun.style.left = '';
-          gun.style.top = '';
+      10% {
+        clip-path: var(--slice-3);
+        transform: translate(10px, 10px);
       }
-
-
-      function checkSpinButton(x, y) {
-        const rect = spin.getBoundingClientRect();
-        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
-            startSpin();
-        }
+      20% {
+        clip-path: var(--slice-1);
+        transform: translate(-10px, 10px);
       }
+      30% {
+        clip-path: var(--slice-3);
+        transform: translate(0px, 5px);
+      }
+      40% {
+        clip-path: var(--slice-2);
+        transform: translate(-5px, 0px);
+      }
+      50% {
+        clip-path: var(--slice-3);
+        transform: translate(5px, 0px);
+      }
+      60% {
+        clip-path: var(--slice-4);
+        transform: translate(5px, 10px);
+      }
+      70% {
+        clip-path: var(--slice-2);
+        transform: translate(-10px, 10px);
+      }
+      80% {
+        clip-path: var(--slice-5);
+        transform: translate(20px, -10px);
+      }
+      90% {
+        clip-path: var(--slice-1);
+        transform: translate(-10px, 0px);
+      }
+      100% {
+        clip-path: var(--slice-1);
+        transform: translate(0);
+      }
+    }
 
+    @media (min-width: 768px) {
+      .button-49,
+      .button-49:after {
+        width: 200px;
+        height: 86px;
+        line-height: 88px;
+      }
+    }
 
-
-      function startSpin() {
-        if (animation) {
-            animation.cancel(); // Reset the animation if it already exists
-        }
-
-        const randomAdditionalDegrees = Math.random() * 360 + 1800;
-        const newEndDegree = previousEndDegree + randomAdditionalDegrees;
-
-        animation = wheel.animate([
-            { transform: `rotate(${previousEndDegree}deg)` },
-            { transform: `rotate(${newEndDegree}deg)` }
-        ], {
-            duration: 4000,
-            direction: 'normal',
-            easing: 'cubic-bezier(0.440, -0.205, 0.000, 1.130)',
-            fill: 'forwards',
-            iterations: 1
-        });
-
-            previousEndDegree = newEndDegree;
-
-            // Show result after animation completes
-            animation.onfinish = () => {
-                const winningIndex = Math.floor((360 - (newEndDegree % 360)) / 36); // 360/10 items
-            
-                // 用圖片來表示獎品
-                const prizeImages = [
-                    '也格.jpg',  '下載.jpg',  '下載1.jpg', '圖片1.jpg', 
-                    '也格.jpg', '也格.jpg','也格.jpg', '也格.jpg', '也格.jpg','也格.jpg' 
-                ];
-                const winningPrizeImage = prizeImages[winningIndex];
-            
-                // 動態插入獎品圖片到 modal 中
-                resultText.innerHTML = `<img src="${winningPrizeImage}" alt="Prize Image" style="max-width: 100%; height: auto;">`;
-                modal.style.display = 'block';
-            };
-        }
 
        
 
+        /* Style for modal and prize result */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        /* Added new style for prize image container */
+        #result {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Added new style for prize image */
+        #result img {
+            max-width: 90%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        /* Updated close button styles */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #aaa;
+            font-size: 100px;  /* Increased from 28px */
+            font-weight: bold;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover, .close:focus {
+            color: #333;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            transform: scale(1.1);
+        }
+
+        h1 {
+          font-family: 'Noto Serif TC', serif;
+         
+          text-align: center;
+          font-size: 3.5rem;
+       }
 
 
+    </style>
+</head>
+<body>
+    <div class="wheel-container">
+        <img id="wheel" src="轉盤最終.png" alt="Spin the wheel">
+        <button class="button-49" role="button" onclick="spinWheel()">Spin</button>
+    </div>
 
+    <!-- Modal Structure -->
+    <div id="prizeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h1>今天就來一杯</h1>
+            <div id="result"></div>
+        </div>
+    </div>
 
-      
+    <script>
+        let isSpinning = false;
+        let startAngle = 0;
 
-        spin.addEventListener('click', startSpin);
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
 
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+            const wheel = document.getElementById("wheel");
 
-        window.addEventListener('click', (event) => {
+            
+
+             // Generate a random number between 1 and 10, then multiply by 36 to get a rotation in steps of 36 degrees
+
+            const randomStep = Math.round(Math.random() * 10) + 1; // 1 to 10
+            const randomRotation = 3600 + (randomStep * 36); // minimum 3600 + 36, max 3600 + 360
+            const totalRotation = startAngle + randomRotation;
+
+            // Start rotation animation
+            wheel.style.transition = "transform 4s cubic-bezier(0.33, 1, 0.68, 1)";
+            wheel.style.transform = `rotateZ(${totalRotation}deg)`;
+
+            // Calculate result after animation ends
+            wheel.addEventListener("transitionend", () => {
+                const finalAngle = totalRotation % 360;
+                const numOptions = 10;
+                const degreesPerOption = 360 / numOptions;
+                //console.log("Final Angle:", finalAngle);
+                
+                const winningIndex = Math.floor(finalAngle / degreesPerOption);
+                //console.log("winning index",winningIndex);
+                //console.log("pic",winningIndex+1);
+
+                // Prize images array
+                const prizeImages = [
+                    '1.png', '2.png', '3.png', '4.png', '5.png',
+                    '6.png', '7.png', '8.png', '9.png','10.png'
+                ];
+
+                // Get winning prize image
+                const winningPrizeImage = prizeImages[winningIndex];
+
+                // Display the prize in the modal
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = `<img src="${winningPrizeImage}" alt="Prize Image">`;
+                document.getElementById("prizeModal").style.display = 'block';
+
+                // Reset for the next spin
+                wheel.style.transition = "none";
+                wheel.style.transform = `rotate(${finalAngle}deg)`;
+                startAngle = finalAngle;
+                isSpinning = false;
+            }, { once: true });
+        }
+
+        // Close modal function
+        function closeModal() {
+            document.getElementById("prizeModal").style.display = 'none';
+        }
+
+        // Close modal if clicked outside of content
+        window.onclick = function(event) {
+            const modal = document.getElementById("prizeModal");
             if (event.target == modal) {
-                modal.style.display = 'none';
+                modal.style.display = "none";
             }
-        });
-      }
-
-  // Initialize the wheel
-  wheelOfFortune('.ui-wheel-of-fortune');
-
-  </script>
+        }
+    </script>
 </body>
 </html>
