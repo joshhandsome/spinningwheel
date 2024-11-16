@@ -52,6 +52,15 @@
         
       }
         
+      #pointer {
+        position: absolute;
+        top: 43%; /* Center vertically */
+        left: 50%; /* Center horizontally */
+        transform: translate(-50%, -50%) translateY(-5%) ; /* Adjust to center on the wheel */
+        
+        z-index: 10; /* Ensure it appears above the wheel */
+        pointer-events: none; /* Make sure clicks pass through to the button */
+    }
 
 
 
@@ -236,6 +245,7 @@
 </head>
 <body>
     <div class="wheel-container">
+        <img id="pointer" src="背景箭頭.png" alt="Pointer">
         <img id="wheel" src="轉盤最終.png" alt="Spin the wheel">
         <button class="button-49" role="button" onclick="spinWheel()">Spin</button>
     </div>
